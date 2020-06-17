@@ -1,0 +1,58 @@
+
+# Import libraries 
+from PIL import Image 
+import os
+import pytesseract 
+import sys 
+from pdf2image import convert_from_path
+import os 
+from pdf2image.exceptions import (
+    PDFInfoNotInstalledError,
+    PDFPageCountError,
+    PDFSyntaxError
+)
+
+
+  
+# Path of the pdf 
+PDF_file = "bank.pdf"
+  
+''' 
+Part #1 : Converting PDF to images 
+'''
+  
+# Store all the pages of the PDF in a variable 
+pages = convert_from_path(PDF_file) 
+  
+
+  
+# Iterate through all the pages stored above 
+for page in pages: 
+  
+   
+    filename = "page1.jpg"
+
+      
+    # Save the image of the page in system 
+    page.save(filename, 'JPEG') 
+  
+    # Increment the counter to update filename 
+    
+''' 
+Part #2 - Recognizing text from the images using OCR 
+'''
+filename = "page1.jpg"
+          
+    # Recognize the text as string in image using pytesserct 
+text = str(((pytesseract.image_to_string(Image.open(filename))))) 
+
+data=text.split()
+
+bank=['Kotak','Mahindra','Axis','©SBI']# data we want to search in pdf
+result=[i for i in data if i in bank]
+print(" ".join(result),"bank")
+
+
+ 
+
+os.remove("page1.jpg")
